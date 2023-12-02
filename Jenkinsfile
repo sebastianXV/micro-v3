@@ -18,8 +18,8 @@ pipeline {
             steps {
                 script {
                     sh "docker build -t proyectos-micros:v1 ."
-                    sh "docker build -t proyectos-micros-2:v1 ./path/to/proyectos-micros-2"
-                    sh "docker build -t loader-balancer:v1 ./path/to/loader-balancer"
+                    sh "docker build -t proyectos-micros-2:v1 ."
+                    sh "docker build -t loader-balancer:v1 ."
                 }
             }
         }
