@@ -6,7 +6,7 @@ pipeline {
             steps {
                 git branch: 'main', 
                 credentialsId: 'git-jenkins', 
-                url: '"https://github.com/sebastianXV/micro-v3"'
+                url: 'https://github.com/sebastianXV/micro-v3'
             }
         }
 
