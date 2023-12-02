@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Clonar repositorio'){
+        stage('Clonar repositorio') {
             steps {
                 git branch: 'main', 
                 credentialsId: 'git-jenkins', 
@@ -10,28 +10,29 @@ pipeline {
             }
         }
 
-        stage('Construir image de docker'){
-            steps {
-                    script {
-                        withCredentials([
-                            string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
-                        ]) {
-                            sh """
-                            docker build --build-arg MONGO_URI=${MONGO_URI} -t proyectos-micros:v1 .
-                            """  
-                        }
-                    }
-                }
-        }
-
-        stage('Desplegar contenedores Docker'){
+        stage('Construir imagen de Docker') {
             steps {
                 script {
                     withCredentials([
-                            string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
+                        string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
                         sh """
-                            docker-compose -f docker-compose.yml up -d
+                        docker build --build-arg MONGO_URI=${MONGO_URI} -t proyectos-micros:v1 .
+                        """  
+                    }
+                }
+            }
+        }
+
+        stage('Desplegar contenedores Docker') {
+            steps {
+                script {
+                    withCredentials([
+                        string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
+                    ]) {
+                        sh """
+                        sed "s|\\${MONGO_URI}|${MONGO_URI}|g" docker-compose.yml > docker-compose-updated.yml
+                        docker-compose -f docker-compose-updated.yml up -d
                         """
                     }
                 }
@@ -39,4 +40,3 @@ pipeline {
         }
     }
 }
-
