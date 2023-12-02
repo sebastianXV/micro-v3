@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    environment {
+        MONGO_URI = credentials('MONGO_URI')
+    }
     stages {
         stage('Clonar repositorio') {
             steps {
@@ -15,9 +18,7 @@ pipeline {
         stage('Construir imagen de Docker') {
             steps {
                 script {
-                    withCredentials([
-                        string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
-                    ]) {
+   
                         sh "docker build --build-arg MONGO_URI=${MONGO_URI} -t proyectos-micros:v1 ."
                     }
                 }
@@ -30,13 +31,10 @@ pipeline {
                     withCredentials([
                         string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
-                        sh """
-                        sed 's|\\${MONGO_URI}|${MONGO_URI}|g' docker-compose.yml > docker-compose-updated.yml
-                        docker-compose -f docker-compose-updated.yml up -d
-                        """
+                        sh('docker-compose.yml > docker-compose-updated.yml
+                        docker-compose -f docker-compose-updated.yml up -d')
                     }
                 }
             }
         }
     }
-}
