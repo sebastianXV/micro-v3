@@ -11,7 +11,7 @@ services :
       - proyectos-app
     environment:
       - MONGO_URI=mongodb+srv://sebastian1116234435:JGdpCy3FvbOybjoG@cluster0.wh0yrvo.mongodb.net/?retryWrites=true&w=majority
-      - PORT=4002
+      - PORT=4001
 
   proyectos-micros-2 :
     container_name : proyectos-micros-2
@@ -20,6 +20,9 @@ services :
       - "4001"
     networks : 
       - proyectos-app
+    environment:
+      - MONGO_URI=mongodb+srv://sebastian1116234435:JGdpCy3FvbOybjoG@cluster0.wh0yrvo.mongodb.net/?retryWrites=true&w=majority
+      - PORT=4001
   
   loader-balancer:
     container_name : loader-balancer
